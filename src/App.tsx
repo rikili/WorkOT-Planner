@@ -7,6 +7,7 @@ import {
 } from 'react-router-dom';
 import DrawerOpen from './Components/Drawer/OpenDrawerButton';
 import DrawerNav from './Components/Drawer/DrawerContent/DrawerNav';
+import CalendarPage from './Components/Routes/CalendarController';
 
 import './App.scss';
 
@@ -48,7 +49,7 @@ function App() {
                             <div>route 3</div>
                         </Route>
                         <Route path="/">
-                            <div>route 1</div>
+                            <CalendarPage/>
                         </Route>
                     </Switch>
                 </Content>
