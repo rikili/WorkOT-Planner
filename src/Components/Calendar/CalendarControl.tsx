@@ -1,5 +1,4 @@
 import React from 'react';
-// import { Change } from './Calendar';
 import './CalendarControl.scss';
 
 interface Props {

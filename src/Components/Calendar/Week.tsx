@@ -1,5 +1,5 @@
 import React from 'react';
-import { weekTemplate } from './Calendar';
+import { weekTemplate } from './CalendarUtils';
 import './Week.scss';
 
 interface Props {
@@ -7,7 +7,6 @@ interface Props {
 }
 
 const Week = (props: Props) => {
-    console.log(props.template);
     let currCounter = 0;
     let altCounter = 0;
     const weekLabels: number[] = [];
