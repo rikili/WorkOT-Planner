@@ -1,23 +1,25 @@
 import React from 'react';
+import { weekTemplate } from './Calendar';
 import './Week.scss';
 
 interface Props {
-    startDay: number,
-    endDay: number,
-    startDOW: number,
-    endDOW: number
+    template: weekTemplate;
 }
 
 const Week = (props: Props) => {
-    let counter = 0;
+    console.log(props.template);
+    let currCounter = 0;
+    let altCounter = 0;
     const weekLabels: number[] = [];
     for (let day = 0; day < 7; day++) {
-        const potentDay: number = props.startDay + counter;
-        if (day < props.startDOW || potentDay > props.endDay) {
-            weekLabels.push(NaN);
+        const potentDay: number = props.template.startDay + currCounter;
+        const potentAltDay: number = props.template.split.startDay + altCounter
+        if (day < props.template.startDOW || potentDay > props.template.endDay) {
+            weekLabels.push(potentAltDay);
+            altCounter++;
         } else {
             weekLabels.push(potentDay);
-            counter++;
+            currCounter++;
         }
     }
 
@@ -25,8 +27,8 @@ const Week = (props: Props) => {
         <div className="week">
             {weekLabels.map((date: number, index: number) => {
                 return (
-                    <div className="day" key={`date-${isNaN(date) ? 'Not' : date}-${props.startDay + index}`}>
-                        {isNaN(date) ? 'n' : date}
+                    <div className="day" key={`date-${isNaN(date) ? 'Not' : date}-${props.template.startDay + index}`}>
+                        {isNaN(date) ? ' ' : date}
                     </div>
                 );
             })}

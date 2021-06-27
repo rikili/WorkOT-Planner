@@ -1,0 +1,14 @@
+.control-bar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 10px;
+}
+
+.month-control {
+    padding: 5px;
+    margin: 5px;
+    color: black;
+    text-align: center;
+    background-color: darkgrey;
+}
