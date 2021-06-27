@@ -1,33 +1,24 @@
 import React from 'react';
-import { weekTemplate } from './CalendarUtils';
+import { DateForm } from './CalendarUtils';
+import clsx from 'clsx';
 import './Week.scss';
 
 interface Props {
-    template: weekTemplate;
+    template: DateForm[];
+    focusMonth: number;
 }
 
 const Week = (props: Props) => {
-    let currCounter = 0;
-    let altCounter = 0;
-    const weekLabels: number[] = [];
-    for (let day = 0; day < 7; day++) {
-        const potentDay: number = props.template.startDay + currCounter;
-        const potentAltDay: number = props.template.split.startDay + altCounter
-        if (day < props.template.startDOW || potentDay > props.template.endDay) {
-            weekLabels.push(potentAltDay);
-            altCounter++;
-        } else {
-            weekLabels.push(potentDay);
-            currCounter++;
-        }
-    }
-
     return (
-        <div className="week">
-            {weekLabels.map((date: number, index: number) => {
+        <div className='week'>
+            {props.template.map((dateForm: DateForm, index: number) => {
+                const isFocusMonth = (props.focusMonth === dateForm.month);
                 return (
-                    <div className="day" key={`date-${isNaN(date) ? 'Not' : date}-${props.template.startDay + index}`}>
-                        {isNaN(date) ? ' ' : date}
+                    <div
+                        className={clsx([isFocusMonth && 'day', !isFocusMonth && 'day-non-focus'])}
+                        key={`date-${dateForm.date + index}`}
+                    >
+                        <span className='day-label'>{dateForm.date}</span>
                     </div>
                 );
             })}

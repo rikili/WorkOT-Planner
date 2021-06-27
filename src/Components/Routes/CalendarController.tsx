@@ -1,12 +1,12 @@
 import React from 'react';
-import { Calendar } from '../Calendar/Calendar';
+import Calendar from '../Calendar/Calendar';
 
 const today = new Date();
 
 const CalendarPage = () => {
     return (
         <div>
-            <Calendar startDate={today}/>
+            <Calendar today={today}/>
         </div>
     )
 };

@@ -2,17 +2,48 @@
     display: flex;
     flex-wrap: nowrap;
     // justify-content: center;
-    background-color: rgb(196, 196, 196);
+    transition: height 1s ease-in;
+    background-color: lightgray;
+    &.hidden {
+        visibility: hidden;
+    }
 }
 
-.day {
+%day-template {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-width: 60px;
-    min-height: 60px;
-    margin: 10px;
-    border-radius: 50%;
-    color: white;
-    background-color: rgb(185, 185, 185);
+    flex-grow: 1;
+    margin: 0.5em;
+    cursor: pointer;
+    aspect-ratio: 1 / 1;
+}
+
+.day {
+    @extend %day-template;
+    background-color: rgb(190, 190, 190);
+    color: grey;
+
+    &:hover {
+        background-color: rgb(163, 163, 163);
+    }
+}
+
+.day-non-focus {
+    @extend %day-template;
+    background-color: rgb(200, 200, 200);
+    color: rgb(145, 145, 145);
+
+    &:hover {
+        background-color: rgb(175, 175, 175);
+    }
+}
+
+// .space {
+//     color: transparent;
+// }
+
+.day-label {
+    width: 15px;
+    text-align: center;
 }
