@@ -1,18 +1,14 @@
 import React, { useState } from 'react';
 import { format } from 'date-fns';
-import Month from './Month';
+import Month from '../../Containers/Month';
 import CalendarControl from './CalendarControl';
-// import { weekTemplate, makeMonthTemplates } from './CalendarUtils';
-// import { createMonthArray } from './CalendarUtils';
 import './Calendar.scss';
 
-interface Props {
-    today: Date;
-}
+const today = new Date();
 
-const Calendar = (props: Props) => {
-    const [focusMonth, setFocusMonth] = useState(props.today.getMonth() + 1);
-    const [focusYear, setForcusYear] = useState(props.today.getFullYear());
+const Calendar = () => {
+    const [focusMonth, setFocusMonth] = useState(today.getMonth() + 1);
+    const [focusYear, setForcusYear] = useState(today.getFullYear());
 
     const changeFocusMonth = (com: number) => {
         const delta = (com) ? 1 : -1;
@@ -28,19 +24,20 @@ const Calendar = (props: Props) => {
         }
     }
 
-    // const monthTemplate: weekTemplate[] = makeMonthTemplates(firstOfMonth, lastOfMonth);
-    // const monthArray = createMonthArray(firstOfMonth.getMonth() + 1);
     const firstOfFocus = new Date(`${focusMonth} 1 ${focusYear}`);
     return (
-        <div className="calendar">
-            <CalendarControl
-                month={format(firstOfFocus, 'LLLL')}
-                year={format(firstOfFocus, 'yyyy')}
-                modify={changeFocusMonth}
-            />
-            <Month
-                firstOfFocus={firstOfFocus}
-            />
+        <div className="calendar-wrapper">
+            <div className="calendar">
+                <CalendarControl
+                    month={format(firstOfFocus, 'LLLL')}
+                    year={format(firstOfFocus, 'yyyy')}
+                    modify={changeFocusMonth}
+                />
+                <Month
+                    firstOfFocus={firstOfFocus}
+                    today={today}
+                />
+            </div>
         </div>
     )
 };

@@ -3,41 +3,47 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    padding: 10px;
-    background-color: grey;
+    padding: 20px 10px 5px 10px;
+    // background-color: grey;
 }
 
 .calendar-label {
     display: flex;
     justify-content: left;
     height: 50%;
+    color: grey;
 }
 
 .label {
-    font-family: roboto;
-    font-size: 20px;
+    font-family: Helvetica;
+    font-size: 22px;
     display: flex;
     align-items: center;
     cursor: default;
-}
 
-.label-year {
-    margin-right: 5px;
-    padding-right: 5px;
-    border-right-style: solid;
-    border-width: 1px;
+    &.year {
+        margin-right: 5px;
+        padding-right: 5px;
+        border-right-style: solid;
+        border-width: 1px; 
+    }
+
+    &.month {
+        font-family: Arial;
+        font-weight: bold;
+    }
 }
 
 .controls {
     display: flex;
-    justify-content: center;
-    width: 80px;
+    justify-content: flex-end;
+    width: 8em;
 }
 
 .month-control {
-    padding: 5px;
-    margin: 5px;
-    width: 50%;
+    padding: 5px 0px 5px 0px;
+    margin-left: 5px;
+    width: 30%;
     border-radius: 10%;
     color: grey;
     text-align: center;

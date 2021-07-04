@@ -1,60 +1,51 @@
 import React from 'react';
-import { lastDayOfMonth, isSaturday } from 'date-fns';
-import { translateMonth, DateForm } from './CalendarUtils';
+import {
+    lastDayOfMonth,
+    isSaturday,
+    isSunday,
+    isToday,
+    isBefore,
+    startOfWeek,
+    endOfWeek
+} from 'date-fns';
+import { DateForm, constructDayString, constructWeekArray } from './CalendarUtils';
+import { withRouter } from 'react-router-dom';
+import { RouteComponentProps } from 'react-router';
 import Week from './Week';
 
-interface Props {
+interface Props extends RouteComponentProps<void> {
     firstOfFocus: Date;
-}
-
-const getEarliestDay = (last: Date) => {
-    return last.getDate() - last.getDay();
-}
-
-const getLatestDay = (last: Date) => {
-    return 1 + (6 - last.getDay() + 1);
+    today: Date;
+    setDate: (inp: string) => void;
+    setWeek: (inp: string[]) => void;
 }
 
 const createMonthArray = (firstOfFocus: Date) => {
     const monthArray: DateForm[][] = [];
-    const firstCurrMonth: Date = new Date(firstOfFocus);
-    const prevMonth: Date = new Date(firstCurrMonth);
-    prevMonth.setMonth(firstCurrMonth.getMonth() - 1);
-    const lastOfPrevMonth = lastDayOfMonth(prevMonth);
-    const lastOfCurrMonth = lastDayOfMonth(firstCurrMonth);
-    const firstOfCal = getEarliestDay(lastOfPrevMonth);
-    const lastOfCal = getLatestDay(lastOfCurrMonth);
-    const isPrevLastOnSat = isSaturday(lastOfPrevMonth);
-    const isNextFirstOnSun = isSaturday(lastOfCurrMonth);
 
-    const breakpoints: [number, number][] = [];
-    const currMonth = firstCurrMonth.getMonth();
-    const breakpointMonths: number[] = [translateMonth(currMonth - 1).month, currMonth, translateMonth(currMonth + 1).month];
-    const breakpointMap: number[] = []
+    const checkFirstIsSun: Boolean = isSunday(firstOfFocus)
+    const firstSunday: Date = (checkFirstIsSun) ? new Date(firstOfFocus) : startOfWeek(firstOfFocus);
 
-    if (!isPrevLastOnSat) {
-        breakpoints.push([firstOfCal, lastOfPrevMonth.getDate()]);
-        breakpointMap.push(0);
-    }
-    breakpoints.push([1, lastOfCurrMonth.getDate()]);
-    breakpointMap.push(1);
-    if (!isNextFirstOnSun) {
-        breakpoints.push([1, lastOfCal]);
-        breakpointMap.push(2);
-    }
+    const lastDayOfFocus: Date = lastDayOfMonth(firstOfFocus);
+    const checkLastIsSat: Boolean = isSaturday(lastDayOfFocus);
+    const lastSaturday: Date = (checkLastIsSat) ? lastDayOfFocus : endOfWeek(lastDayOfFocus);
+    lastSaturday.setDate(lastSaturday.getDate() + 1);
+
+    const dayCounter: Date = new Date(firstSunday);
     let toAddWeek: DateForm[] = [];
-    breakpoints.forEach((breakList: [number, number], index: number) => {
-        for (let currDate = breakList[0]; currDate <= breakList[1]; currDate++) {
-            toAddWeek.push({
-                month: breakpointMonths[breakpointMap[index]],
-                date: currDate
-            });
-            if (toAddWeek.length >= 7) {
-                monthArray.push([...toAddWeek]);
-                toAddWeek = [];
-            }
+    while (isBefore(dayCounter, lastSaturday)) {
+        toAddWeek.push({
+            month: dayCounter.getMonth(),
+            date: dayCounter.getDate(),
+            year: dayCounter.getFullYear(),
+            flag: (isToday(dayCounter)) ? 'today' : 'NA'
+        })
+        if (toAddWeek.length >= 7) {
+            monthArray.push(toAddWeek);
+            toAddWeek = [];
         }
-    });
+        dayCounter.setDate(dayCounter.getDate() + 1);
+    }
     if (monthArray.length > 5) {
         monthArray.pop();
     }
@@ -62,9 +53,15 @@ const createMonthArray = (firstOfFocus: Date) => {
 }
 
 const Month = (props: Props) => {
+    const onClickDay = (inp: DateForm, week: DateForm[]) => {
+        const weekArray: string[] = constructWeekArray(week);
+        props.setWeek(weekArray);
+        props.setDate(constructDayString(inp));
+        props.history.push('/week');
+    }
+
     const focusMonth = props.firstOfFocus.getMonth();
     const monthArray = createMonthArray(props.firstOfFocus);
-
     return (
         <div className='month'>
             {monthArray.map((week: DateForm[], index: number) => {
@@ -73,6 +70,7 @@ const Month = (props: Props) => {
                         <Week
                             template={week}
                             focusMonth={focusMonth}
+                            clickFunc={(inp: DateForm) => onClickDay(inp, week)}
                         />
                     </div>
                 )
@@ -81,4 +79,4 @@ const Month = (props: Props) => {
     )
 };
 
-export default Month;
+export default withRouter(Month);

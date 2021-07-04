@@ -1,27 +1,24 @@
 import React, { useState } from 'react';
 import { Layout, Drawer } from 'antd';
 import {
-    BrowserRouter as Router,
-    Switch,
-    Route
+    BrowserRouter as Router
 } from 'react-router-dom';
 import DrawerOpen from './Components/Drawer/OpenDrawerButton';
 import DrawerNav from './Components/Drawer/DrawerContent/DrawerNav';
-import CalendarPage from './Components/Routes/CalendarController';
+import Routing from './Components/Routing';
 
 import './App.scss';
 
 const { Header, Content } = Layout;
-// let drawerVisible = false;
 
 function App() {
     const [drawerVisible, setDrawerVisible] = useState<boolean>(false);
 
-    function openDrawer(): void {
+    const openDrawer = () => {
         setDrawerVisible(true);
     }
 
-    function closeDrawer(): void {
+    const closeDrawer = () => {
         setDrawerVisible(false);
     }
 
@@ -41,17 +38,7 @@ function App() {
                     <DrawerOpen open={openDrawer} />
                 </Header>
                 <Content>
-                    <Switch>
-                        <Route path="/weekTempl">
-                            <div>route 2</div>
-                        </Route>
-                        <Route path="/Temp">
-                            <div>route 3</div>
-                        </Route>
-                        <Route path="/">
-                            <CalendarPage/>
-                        </Route>
-                    </Switch>
+                    <Routing/>
                 </Content>
             </Layout>
         </Router>

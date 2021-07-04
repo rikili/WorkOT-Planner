@@ -1,8 +1,19 @@
-.calendar{
+.calendar {
+    // position: absolute;
+    // transform: translate(0%, 1%);
+    margin: auto;
     display: flex;
     flex-direction: column;
     // justify-content: space-evenly;
     order: 5;
     max-width: 100vh;
-    color: white;
+    background-color: white;
+    min-height: 80vh;
+}
+
+.calendar-wrapper {
+    margin: auto;
+    padding: 0px 15px 50px 15px;
+    max-width: 110vh;
+    background-color: white;
 }

@@ -1,28 +1,25 @@
 export interface DateForm {
     month: number;
     date: number;
+    year: number;
+    flag: string;
 }
 
-interface monthTranslate {
-    month: number;
-    yearDelta: number;
+export const constructDayString = (dateForm: DateForm): string => {
+    const date = String(dateForm.date);
+    const month = String(dateForm.month + 1);
+    const year = String(dateForm.year);
+    return `${(month.length < 2) ? '0' + month : month}-${(date.length < 2) ? '0' + date : date}-${year.substring(2, 4)}`;
 }
 
-export const translateMonth = (inp: number):monthTranslate => {
-    if (inp < 0) {
-        return {
-            month: 12 + inp + 1,
-            yearDelta: -1
-        };
-    } else if (inp > 11) {
-        return {
-            month: inp - 12,
-            yearDelta: 1
-        };
-    } else {
-        return {
-            month: inp,
-            yearDelta: 0
-        };
-    }
-};
+export const readDayString = (dayString: string): Date => {
+    return new Date(dayString);
+}
+
+export const constructWeekArray = (weekTemplate: DateForm[]): string[] => {
+    return [constructDayString(weekTemplate[0]), constructDayString(weekTemplate[6])];
+}
+
+export const readWeekString = (weekString: [string, string]): [Date, Date] => {
+    return [new Date(weekString[0]), new Date(weekString[1])];
+}
