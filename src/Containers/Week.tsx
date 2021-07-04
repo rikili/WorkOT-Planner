@@ -1,5 +1,5 @@
 import { connect, ConnectedProps } from 'react-redux';
-import Month from '../Components/Calendar/Month';
+import Week from '../Components/Calendar/Week';
 import { setDate, setWeek } from '../Redux/Modules/Date';
 
 const mapDispatch = {
@@ -10,4 +10,4 @@ const mapDispatch = {
 const connector = connect(null, mapDispatch);
 export type PropsFromRedux = ConnectedProps<typeof connector>;
 
-export default connector(Month);
+export default connector(Week);

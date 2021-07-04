@@ -8,16 +8,12 @@ import {
     startOfWeek,
     endOfWeek
 } from 'date-fns';
-import { DateForm, constructDayString, constructWeekArray } from './CalendarUtils';
-import { withRouter } from 'react-router-dom';
-import { RouteComponentProps } from 'react-router';
-import Week from './Week';
+import { DateForm } from './CalendarUtils';
+import Week from '../../Containers/Week';
 
-interface Props extends RouteComponentProps<void> {
+interface Props {
     firstOfFocus: Date;
     today: Date;
-    setDate: (inp: string) => void;
-    setWeek: (inp: string[]) => void;
 }
 
 const createMonthArray = (firstOfFocus: Date) => {
@@ -53,13 +49,6 @@ const createMonthArray = (firstOfFocus: Date) => {
 }
 
 const Month = (props: Props) => {
-    const onClickDay = (inp: DateForm, week: DateForm[]) => {
-        const weekArray: string[] = constructWeekArray(week);
-        props.setWeek(weekArray);
-        props.setDate(constructDayString(inp));
-        props.history.push('/week');
-    }
-
     const focusMonth = props.firstOfFocus.getMonth();
     const monthArray = createMonthArray(props.firstOfFocus);
     return (
@@ -70,7 +59,6 @@ const Month = (props: Props) => {
                         <Week
                             template={week}
                             focusMonth={focusMonth}
-                            clickFunc={(inp: DateForm) => onClickDay(inp, week)}
                         />
                     </div>
                 )
@@ -79,4 +67,4 @@ const Month = (props: Props) => {
     )
 };
 
-export default withRouter(Month);
+export default Month;

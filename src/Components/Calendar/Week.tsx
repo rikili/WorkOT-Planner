@@ -1,36 +1,48 @@
 import React from 'react';
-import { DateForm } from './CalendarUtils';
+import { DateForm, constructDayString, constructWeekArray } from './CalendarUtils';
+import { withRouter } from 'react-router-dom';
+import { RouteComponentProps } from 'react-router';
 import clsx from 'clsx';
+import { PropsFromRedux } from '../../Containers/Week';
+import Day from './Day';
 import './Week.scss';
 
-export interface Props {
+export interface Props extends RouteComponentProps<void>, PropsFromRedux {
     template: DateForm[];
     focusMonth: number;
-    clickFunc: any;
 }
 
 const Week = (props: Props) => {
+    const onClickDay = (inp: DateForm) => {
+        const weekArray: string[] = constructWeekArray(props.template);
+        props.setWeek(weekArray);
+        props.setDate(constructDayString(inp));
+        props.history.push('/week');
+    }
+
+    const getClass = (dateForm: DateForm): string => {
+        const isFocusMonth = (props.focusMonth === dateForm.month);
+        return clsx([
+            isFocusMonth && 'day',
+            !isFocusMonth && 'day-non-focus',
+            (dateForm.flag === 'today') && 'today'
+        ]);
+    }
+
     return (
         <div className='week'>
             {props.template.map((dateForm: DateForm, index: number) => {
-                const isFocusMonth = (props.focusMonth === dateForm.month);
-                const thisClass = clsx([
-                    isFocusMonth && 'day',
-                    !isFocusMonth && 'day-non-focus',
-                    (dateForm.flag === 'today') && 'today'
-                ]);
                 return (
-                    <button
-                        className={thisClass}
+                    <Day
+                        classString={getClass(dateForm)}
                         key={`date-${dateForm.date + index}`}
-                        onClick={() => props.clickFunc(dateForm)}
-                    >
-                        <span className='day-label'>{dateForm.date}</span>
-                    </button>
+                        label={String(dateForm.date)}
+                        clickFunc={() => onClickDay(dateForm)}
+                    />
                 );
             })}
         </div>
     )
 };
 
-export default Week;
+export default withRouter(Week);

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { format } from 'date-fns';
-import Month from '../../Containers/Month';
+import Month from './Month';
 import CalendarControl from './CalendarControl';
 import './Calendar.scss';
 
