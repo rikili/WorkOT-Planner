@@ -8,15 +8,16 @@ import {
     startOfWeek,
     endOfWeek
 } from 'date-fns';
-import { DateForm, makeDateFormArr } from './CalendarUtils';
+import { makeDateFormArr } from './CalendarUtils';
+import DateForm, { DateFormFlag } from '../Types/DateForm';
 import Week from '../../Containers/Week';
 
 interface Props {
     firstOfFocus: Date;
 }
 
-const makeFlagName = (inpDate: Date): string => {
-    return (isToday(inpDate)) ? 'today' : 'NA'
+const makeFlagName = (inpDate: Date): DateFormFlag => {
+    return (isToday(inpDate)) ? DateFormFlag.Today : DateFormFlag.NA;
 }
 
 const createMonthArray = (firstOfFocus: Date) => {

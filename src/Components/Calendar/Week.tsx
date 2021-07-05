@@ -1,5 +1,6 @@
 import React from 'react';
-import { DateForm, constructDayString, constructWeekArray } from './CalendarUtils';
+import DateForm, { DateFormFlag } from '../Types/DateForm';
+import { constructWeekArray } from './CalendarUtils';
 import { withRouter } from 'react-router-dom';
 import { RouteComponentProps } from 'react-router';
 import clsx from 'clsx';
@@ -16,7 +17,7 @@ const Week = ({ template, focusMonth, history, setDate, setWeek }: Props) => {
     const onClickDay = (inp: DateForm) => {
         const weekArray: string[] = constructWeekArray(template);
         setWeek(weekArray);
-        setDate(constructDayString(inp));
+        setDate(inp.formDayString());
         history.push('/week');
     }
 
@@ -25,7 +26,7 @@ const Week = ({ template, focusMonth, history, setDate, setWeek }: Props) => {
         return clsx([
             isFocusMonth && 'day',
             !isFocusMonth && 'day-non-focus',
-            (dateForm.flag === 'today') && 'today'
+            (dateForm.flag === DateFormFlag.Today) && 'today'
         ]);
     }
 

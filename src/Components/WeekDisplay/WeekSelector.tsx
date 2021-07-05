@@ -1,7 +1,8 @@
 import React from 'react';
+import DateForm, { DateFormFlag } from '../Types/DateForm';
 import { format, isToday } from 'date-fns';
 import { PropsFromRedux } from '../../Containers/WeekSelector';
-import { DateForm, readWeekString, constructDayString, makeDateFormArr } from '../Calendar/CalendarUtils';
+import { readWeekString, makeDateFormArr } from '../Calendar/CalendarUtils';
 import Day from '../Calendar/Day';
 
 import '../Calendar/Week.scss';
@@ -14,8 +15,8 @@ type Props = PropsFromRedux & {
     setDate: (inp: string) => void
 }
 
-const makeFlagName = (inpDate: Date): string => {
-    return (isToday(inpDate)) ? 'today' : 'NA'
+const makeFlagName = (inpDate: Date): DateFormFlag => {
+    return (isToday(inpDate)) ? DateFormFlag.Today : DateFormFlag.NA
 }
 
 const getDateFormArr = (breakpoints: [string, string]): DateForm[] => {
@@ -27,16 +28,16 @@ const WeekSelector = ({ date, week, setDate }: Props) => {
     const dateSelected: Date = new Date(date);
 
     const getClassName = (currDate: DateForm) => {
-        const isSelected: boolean = (constructDayString(currDate) === date);
+        const isSelected: boolean = (currDate.formDayString() === date);
         return clsx([
             isSelected && 'select-day',
             !isSelected && 'day',
-            (currDate.flag === 'today') ? 'today' : ''
+            (currDate.flag === DateFormFlag.Today) ? 'today' : ''
         ]);
     }
 
     const onClickFunction = (clickedDate: DateForm) => {
-        setDate(constructDayString(clickedDate))
+        setDate(clickedDate.formDayString());
     }
 
     return (
