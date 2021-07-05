@@ -4,16 +4,19 @@ import {
     isSaturday,
     isSunday,
     isToday,
-    isBefore,
+    add,
     startOfWeek,
     endOfWeek
 } from 'date-fns';
-import { DateForm } from './CalendarUtils';
+import { DateForm, makeDateFormArr } from './CalendarUtils';
 import Week from '../../Containers/Week';
 
 interface Props {
     firstOfFocus: Date;
-    today: Date;
+}
+
+const makeFlagName = (inpDate: Date): string => {
+    return (isToday(inpDate)) ? 'today' : 'NA'
 }
 
 const createMonthArray = (firstOfFocus: Date) => {
@@ -26,31 +29,19 @@ const createMonthArray = (firstOfFocus: Date) => {
     const checkLastIsSat: Boolean = isSaturday(lastDayOfFocus);
     const lastSaturday: Date = (checkLastIsSat) ? lastDayOfFocus : endOfWeek(lastDayOfFocus);
     lastSaturday.setDate(lastSaturday.getDate() + 1);
-
-    const dayCounter: Date = new Date(firstSunday);
-    let toAddWeek: DateForm[] = [];
-    while (isBefore(dayCounter, lastSaturday)) {
-        toAddWeek.push({
-            month: dayCounter.getMonth(),
-            date: dayCounter.getDate(),
-            year: dayCounter.getFullYear(),
-            flag: (isToday(dayCounter)) ? 'today' : 'NA'
-        })
-        if (toAddWeek.length >= 7) {
-            monthArray.push(toAddWeek);
-            toAddWeek = [];
-        }
-        dayCounter.setDate(dayCounter.getDate() + 1);
-    }
-    if (monthArray.length > 5) {
-        monthArray.pop();
+    let weekStart: Date = new Date(firstSunday);
+    let nextWeekStart: Date = add(weekStart, { days: 6 });
+    for (let count = 0; count < 5; count++) {
+        monthArray.push(makeDateFormArr(weekStart, nextWeekStart, makeFlagName));
+        weekStart = add(nextWeekStart, { days: 1 });
+        nextWeekStart = add(weekStart, { days: 6 });
     }
     return monthArray;
 }
 
-const Month = (props: Props) => {
-    const focusMonth = props.firstOfFocus.getMonth();
-    const monthArray = createMonthArray(props.firstOfFocus);
+const Month = ({ firstOfFocus }: Props) => {
+    const focusMonth = firstOfFocus.getMonth();
+    const monthArray = createMonthArray(firstOfFocus);
     return (
         <div className='month'>
             {monthArray.map((week: DateForm[], index: number) => {

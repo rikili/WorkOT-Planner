@@ -1,10 +1,12 @@
 import React from 'react';
-import { format } from 'date-fns';
+import { format, isToday } from 'date-fns';
 import { PropsFromRedux } from '../../Containers/WeekSelector';
-// import { DateForm, readWeekString, constructDayString } from '../Calendar/CalendarUtils';
-// import Week from '../Calendar/Week';
+import { DateForm, readWeekString, constructDayString, makeDateFormArr } from '../Calendar/CalendarUtils';
+import Day from '../Calendar/Day';
 
+import '../Calendar/Week.scss';
 import './WeekSelector.scss';
+import clsx from 'clsx';
 
 type Props = PropsFromRedux & {
     date: string,
@@ -12,31 +14,43 @@ type Props = PropsFromRedux & {
     setDate: (inp: string) => void
 }
 
-// const makeDateFormArr = (breakpoints: [string, string]): DateForm[] => {
-//     const breakDates: [Date, Date] = readWeekString(breakpoints);
-//     const ret: DateForm[] = [];
-//     const select: Date = new Date(breakDates[0]);
-//     const end: Date = new Date(breakDates[1]);
-//     end.setDate(end.getDate() + 1);
-//     while (isBefore(select, end)) {
-//         ret.push({
-//             month: select.getMonth(),
-//             date: select.getDate(),
-//             year: select.getFullYear(),
-//             flag: 'NA'
-//         });
-//         select.setDate(select.getDate() + 1);
-//     }
-//     return ret;
-// }
+const makeFlagName = (inpDate: Date): string => {
+    return (isToday(inpDate)) ? 'today' : 'NA'
+}
 
-const WeekSelector = (props: Props) => {
-    const dateSelected: Date = new Date(props.date);
+const getDateFormArr = (breakpoints: [string, string]): DateForm[] => {
+    const breakDates: [Date, Date] = readWeekString(breakpoints);
+    return makeDateFormArr(breakDates[0], breakDates[1], makeFlagName);
+}
+
+const WeekSelector = ({ date, week, setDate }: Props) => {
+    const dateSelected: Date = new Date(date);
+
+    const getClassName = (currDate: DateForm) => {
+        const isSelected: boolean = (constructDayString(currDate) === date);
+        return clsx([
+            isSelected && 'select-day',
+            !isSelected && 'day',
+            (currDate.flag === 'today') ? 'today' : ''
+        ]);
+    }
+
+    const onClickFunction = (clickedDate: DateForm) => {
+        setDate(constructDayString(clickedDate))
+    }
+
     return (
         <div>
             <div className="month-label">{format(dateSelected, 'LLLL')}</div>
-            <div className="week-selector">
-                <div>WEEK GOES HERE</div>
+            <div className="week">
+                {getDateFormArr(week).map((item: DateForm, index: number) => {
+                    return (<Day
+                        classString={getClassName(item)}
+                        key={`weekSelect-${index}`}
+                        label={String(item.date)}
+                        clickFunc={() => onClickFunction(item)}
+                    />)
+                })}
             </div>
         </div>
     )

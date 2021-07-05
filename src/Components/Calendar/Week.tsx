@@ -12,16 +12,16 @@ export interface Props extends RouteComponentProps<void>, PropsFromRedux {
     focusMonth: number;
 }
 
-const Week = (props: Props) => {
+const Week = ({ template, focusMonth, history, setDate, setWeek }: Props) => {
     const onClickDay = (inp: DateForm) => {
-        const weekArray: string[] = constructWeekArray(props.template);
-        props.setWeek(weekArray);
-        props.setDate(constructDayString(inp));
-        props.history.push('/week');
+        const weekArray: string[] = constructWeekArray(template);
+        setWeek(weekArray);
+        setDate(constructDayString(inp));
+        history.push('/week');
     }
 
     const getClass = (dateForm: DateForm): string => {
-        const isFocusMonth = (props.focusMonth === dateForm.month);
+        const isFocusMonth = (focusMonth === dateForm.month);
         return clsx([
             isFocusMonth && 'day',
             !isFocusMonth && 'day-non-focus',
@@ -31,7 +31,7 @@ const Week = (props: Props) => {
 
     return (
         <div className='week'>
-            {props.template.map((dateForm: DateForm, index: number) => {
+            {template.map((dateForm: DateForm, index: number) => {
                 return (
                     <Day
                         classString={getClass(dateForm)}

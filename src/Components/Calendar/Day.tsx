@@ -1,18 +1,20 @@
 import React from 'react';
 
+import './Day.scss';
+
 type Props = {
     classString: string;
     label: string;
     clickFunc: () => void;
 }
 
-const Day = (props: Props) => {
+const Day = ({ classString, label, clickFunc }: Props) => {
     return (
         <button
-            className={props.classString}
-            onClick={props.clickFunc}
+            className={classString}
+            onClick={clickFunc}
         >
-            <span className='day-label'>{props.label}</span>
+            <span className='day-label'>{label}</span>
         </button>
     )
 };

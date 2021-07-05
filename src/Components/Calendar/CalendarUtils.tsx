@@ -1,3 +1,5 @@
+import { isBefore } from 'date-fns';
+
 export interface DateForm {
     month: number;
     date: number;
@@ -22,4 +24,21 @@ export const constructWeekArray = (weekTemplate: DateForm[]): string[] => {
 
 export const readWeekString = (weekString: [string, string]): [Date, Date] => {
     return [new Date(weekString[0]), new Date(weekString[1])];
+}
+
+export const makeDateFormArr = (startOrigin: Date, endOrigin: Date, flagGen: (inp: Date) => string): DateForm[] => {
+    const ret: DateForm[] = [];
+    const select = new Date(startOrigin);
+    const end = new Date(endOrigin);
+    end.setDate(end.getDate() + 1);
+    while (isBefore(select, end)) {
+        ret.push({
+            month: select.getMonth(),
+            date: select.getDate(),
+            year: select.getFullYear(),
+            flag: flagGen(select)
+        });
+        select.setDate(select.getDate() + 1);
+    }
+    return ret;
 }

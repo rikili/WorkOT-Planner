@@ -35,7 +35,6 @@ const Calendar = () => {
                 />
                 <Month
                     firstOfFocus={firstOfFocus}
-                    today={today}
                 />
             </div>
         </div>
